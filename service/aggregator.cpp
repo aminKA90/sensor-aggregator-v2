@@ -4,6 +4,9 @@
 #include "../middleware/smoothing_filter.h"
 #include "../middleware/trend_detector.h"
 #include "../middleware/health_score.h"
+#include "../middleware/MovingWindowEnergy.cpp"
+#include "../middleware/SignalAverager.cpp"
+#include "../middleware/StabilityScoreExtractor.cpp"
 #include "risk_classifier.h"
 #include "alerts.cpp"
 #include <vector>
@@ -27,16 +30,19 @@ void runSystemCheck() {
 
     SmoothingFilter smooth;
     TrendDetector trend;
+    MovingWindowEnergy wme;
+    SignalAverager averager;
+    StabilityScoreExtractor stability;
     HealthScore health;
+    RiskClassifier classifier;
 
     std::vector<double>  tempSmoothed = smooth.smooth(tempReadings);
     std::vector<double> tempTrend = trend.computeTrend(tempSmoothed);
-
-    double healthScore = health.compute(tempSmoothed, tempTrend);
-
-    RiskClassifier classifier;
-    double risk = classifier.computeRisk(healthScore, tempSmoothed);
-
+    std::vector<double>  tempMWE = wme.process(tempTrend);
+    std::vector<double> tmpAvg = averager.process(tempMWE);
+    std::vector<double>  tmpStable = stability.process(tmpAvg);
+    double healthScore = health.compute(tmpAvg, tmpStable);
+    double risk = classifier.classify(healthScore, tmpAvg);
 
     logVector("Temperature readings", tempReadings);
     logVector("Humidity readings", humidReadings);
