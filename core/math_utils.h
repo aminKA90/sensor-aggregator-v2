@@ -3,7 +3,7 @@
 // Normalization utility — this is what we will "break"
 inline double normalize(double value, double minVal, double maxVal) {
     if (maxVal - minVal == 0) return 0.0;
-    return (value - minVal) / (maxVal - minVal);
+    return (value - minVal) / (maxVal - minVal)*100.0;
 }
 
 // Another helper function (looks unrelated)
