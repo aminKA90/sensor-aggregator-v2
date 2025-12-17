@@ -26,10 +26,10 @@ reviews:
   path_instructions:
     - path: '**/*.cpp'
       instructions: >-
-        Review the C++ code, check the full context of the repo.
+        Review the C++ code, check the full context of the repo. If any major or critical issue is found suggest code practices.
     - path: '**/*.h'
       instructions: >-
-        Review the C++ code, check the full context of the repo.
+        Review the C++ code, check the full context of the repo. If any major or critical issue is found suggest code practices.
   tools:
     shellcheck:
       enabled: true
