@@ -2,7 +2,7 @@
 #include <iostream>
 
 bool isCritical(double riskScore) {
-    return riskScore > 0.8;
+    return riskScore > 80.0;
 }
 
 void showAlert(double riskScore) {
